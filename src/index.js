@@ -1,28 +1,98 @@
-import _ from "lodash";
-import printMe from "./print.js";
-import "./style.css";
-import Icon from "./icon.png";
+import './style.css';
 
-function component() {
-  const element = document.createElement("div");
-  const btn = document.createElement("button");
+const tasks = [];
 
-  //Lodash, now imported by this script
-  element.innerHTML = _.join(["Hello", "webpack"], " ");
-  element.classList.add("hello");
+const todoList = document.getElementById('todo-list');
+const addTaskButton = document.getElementById('add-task-button');
+const newTaskInput = document.getElementById('new-task-input');
+const clearAllButton = document.getElementById('clear-all-button');
 
-  btn.innerHTML = "Click me and check the console!";
-  btn.onclick = printMe;
+const task1 = {
+  description: 'Complete JavaScript project',
+  completed: false,
+};
 
-  element.appendChild(btn);
+const task2 = {
+  description: 'Learn React',
+  completed: true,
+};
 
-  // Add the image to our existing div.
-  const myIcon = new Image();
-  myIcon.src = Icon;
+const task3 = {
+  description: 'Practice coding exercises',
+  completed: false,
+};
 
-  element.appendChild(myIcon);
+tasks.push(task1, task2, task3);
 
-  return element;
+function renderTasks() {
+  todoList.innerHTML = '';
+
+  for (let i = 0; i < tasks.length; i += 1) {
+    const task = tasks[i];
+
+    const listItem = document.createElement('li');
+    listItem.classList.add('task');
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('task-checkbox');
+    checkbox.checked = task.completed;
+    checkbox.addEventListener('change', () => {
+      task.completed = checkbox.checked;
+    });
+    listItem.appendChild(checkbox);
+
+    const taskDescription = document.createElement('span');
+    taskDescription.classList.add('task-description');
+    taskDescription.innerText = task.description;
+    listItem.appendChild(taskDescription);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+    deleteButton.style.display = 'none';
+    deleteButton.addEventListener('click', () => {
+      tasks.splice(i, 1);
+      renderTasks();
+    });
+    listItem.appendChild(deleteButton);
+
+    const ellipsisButton = document.createElement('button');
+    ellipsisButton.classList.add('ellipsis-button');
+    ellipsisButton.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
+    ellipsisButton.addEventListener('click', () => {
+      deleteButton.style.display = 'inline-block';
+      ellipsisButton.style.display = 'none';
+    });
+    listItem.appendChild(ellipsisButton);
+
+    todoList.appendChild(listItem);
+  }
 }
 
-document.body.appendChild(component());
+addTaskButton.addEventListener('click', () => {
+  const newTaskDescription = newTaskInput.value;
+  if (newTaskDescription.trim() !== '') {
+    const newTask = {
+      description: newTaskDescription,
+      completed: false,
+    };
+    tasks.push(newTask);
+    renderTasks();
+    newTaskInput.value = '';
+  }
+});
+
+newTaskInput.addEventListener('keyup', (event) => {
+  if (event.key === 'Enter') {
+    addTaskButton.click();
+  }
+});
+
+clearAllButton.addEventListener('click', () => {
+  const completedTasks = tasks.filter((task) => task.completed);
+  tasks.splice(0, tasks.length, ...completedTasks);
+  renderTasks();
+});
+
+renderTasks();
