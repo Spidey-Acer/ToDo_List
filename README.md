@@ -36,6 +36,9 @@ Coded with HTML, CSS and JavaScript.
 
 ## Future Features <a name="future-features"></a>
 
+- [Feature_1]: Add an option to group tasks
+- [Feature_2]: Add sub-tasks
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->

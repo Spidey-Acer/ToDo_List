@@ -1,28 +1,27 @@
 import './style.css';
 
-const tasks = [];
+const tasks = [
+  {
+    description: 'Complete JavaScript project',
+    completed: false,
+    index: 0,
+  },
+  {
+    description: 'Learn React',
+    completed: true,
+    index: 1,
+  },
+  {
+    description: 'Practice coding exercises',
+    completed: false,
+    index: 2,
+  },
+];
 
 const todoList = document.getElementById('todo-list');
 const addTaskButton = document.getElementById('add-task-button');
 const newTaskInput = document.getElementById('new-task-input');
 const clearAllButton = document.getElementById('clear-all-button');
-
-const task1 = {
-  description: 'Complete JavaScript project',
-  completed: false,
-};
-
-const task2 = {
-  description: 'Learn React',
-  completed: true,
-};
-
-const task3 = {
-  description: 'Practice coding exercises',
-  completed: false,
-};
-
-tasks.push(task1, task2, task3);
 
 function renderTasks() {
   todoList.innerHTML = '';
@@ -76,6 +75,7 @@ addTaskButton.addEventListener('click', () => {
     const newTask = {
       description: newTaskDescription,
       completed: false,
+      index: tasks.length,
     };
     tasks.push(newTask);
     renderTasks();
