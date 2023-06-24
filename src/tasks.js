@@ -1,16 +1,16 @@
 // tasks.js
 
-const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 function addTask(description) {
   const newTask = {
     description,
     completed: false,
-    index: tasks.length,
+    index: tasks.length + 1,
   };
   tasks.push(newTask);
   saveTasks();
@@ -29,6 +29,4 @@ function editTaskDescription(index, description) {
   saveTasks();
 }
 
-export {
-  tasks, addTask, deleteTask, editTaskDescription,
-};
+export { tasks, addTask, deleteTask, editTaskDescription };
