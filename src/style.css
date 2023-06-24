@@ -159,6 +159,12 @@ body {
   width: 28px;
 }
 
+.task-checkbox:checked ~ .task-description {
+  color: gray;
+  text-decoration: line-through;
+  font-style: italic;
+}
+
 .delete-button {
   color: red;
   border: none;
