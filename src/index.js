@@ -1,6 +1,10 @@
 import './style.css';
 import {
-  tasks, addTask, deleteTask, editTaskDescription,
+  tasks,
+  addTask,
+  deleteTask,
+  editTaskDescription,
+  clearCompletedTasks,
 } from './tasks.js';
 
 function saveTasks() {
@@ -102,3 +106,13 @@ clearAllButton.addEventListener('click', () => {
 });
 
 renderTasks();
+
+const clearCompletedButton = document.getElementById('clear-completed-button');
+clearCompletedButton.addEventListener('click', () => {
+  clearCompletedTasks();
+  renderTasks();
+});
+
+addTaskButton.addEventListener('click', () => {
+  clearCompletedButton.click();
+});
