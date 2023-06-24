@@ -53,11 +53,27 @@ function renderTasks() {
     const taskDescription = document.createElement('span');
     taskDescription.classList.add('task-description');
     taskDescription.innerText = task.description;
-    taskDescription.addEventListener('click', () => {
-      editTaskDescription(i);
-      renderTasks();
-    });
     listItem.appendChild(taskDescription);
+
+    const editTaskDescription = document.createElement('button');
+    editTaskDescription.classList.add('edit-task-description');
+    editTaskDescription.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+    editTaskDescription.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = task.description;
+      input.classList.add('task-input');
+      input.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+          task.description = input.value;
+          saveTasks();
+          renderTasks();
+        }
+      });
+      listItem.replaceChild(input, taskDescription);
+      input.focus();
+    });
+    listItem.appendChild(editTaskDescription);
 
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('delete-button');
