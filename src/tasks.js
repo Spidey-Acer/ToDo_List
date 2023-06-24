@@ -1,5 +1,3 @@
-// tasks.js
-
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 function saveTasks() {
@@ -29,6 +27,20 @@ function editTaskDescription(index, description) {
   saveTasks();
 }
 
+function clearCompletedTasks() {
+  const newTasks = tasks.filter((task) => !task.completed);
+  tasks.length = 0;
+  newTasks.forEach((task) => {
+    tasks.push(task);
+  });
+  saveTasks();
+}
+
 export {
-  tasks, addTask, deleteTask, editTaskDescription,
+  tasks,
+  addTask,
+  deleteTask,
+  editTaskDescription,
+  saveTasks,
+  clearCompletedTasks,
 };
