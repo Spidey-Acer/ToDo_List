@@ -56,7 +56,8 @@ body {
   margin-right: 10px;
 }
 
-.inputs {
+.inputs,
+.task-input {
   width: 100%;
   min-width: 300px;
   margin: 0 auto;
@@ -157,6 +158,18 @@ body {
 .task-checkbox {
   height: 28px;
   width: 28px;
+}
+
+.task-checkbox:checked ~ .task-description {
+  color: gray;
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.edit-task-description {
+  font-size: 1em;
+  border: none;
+  color: #4caf50;
 }
 
 .delete-button {
