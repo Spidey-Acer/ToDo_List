@@ -1,96 +1,72 @@
-import './style.css';
-
-const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-
-const todoList = document.getElementById('todo-list');
-const addTaskButton = document.getElementById('add-task-button');
-const newTaskInput = document.getElementById('new-task-input');
-const clearAllButton = document.getElementById('clear-all-button');
+import "./style.css";
+import { tasks, addTask, deleteTask, editTaskDescription } from "./tasks.js";
 
 function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function updateIndexes() {
-  tasks.forEach((task, i) => {
-    task.index = i;
-  });
-}
-
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  updateIndexes();
-  saveTasks();
-}
-
-function addTask(description) {
-  const newTask = {
-    description,
-    completed: false,
-    index: tasks.length,
-  };
-  tasks.push(newTask);
-  saveTasks();
-}
+const todoList = document.getElementById("todo-list");
+const addTaskButton = document.getElementById("add-task-button");
+const newTaskInput = document.getElementById("new-task-input");
+const clearAllButton = document.getElementById("clear-all-button");
 
 function renderTasks() {
-  todoList.innerHTML = '';
+  todoList.innerHTML = "";
 
   tasks.forEach((task, i) => {
-    const listItem = document.createElement('li');
-    listItem.classList.add('task');
+    const listItem = document.createElement("li");
+    listItem.classList.add("task");
 
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.classList.add('task-checkbox');
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add("task-checkbox");
     checkbox.checked = task.completed;
-    checkbox.addEventListener('change', () => {
+    checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked;
       saveTasks();
     });
     listItem.appendChild(checkbox);
 
-    const taskDescription = document.createElement('span');
-    taskDescription.classList.add('task-description');
+    const taskDescription = document.createElement("span");
+    taskDescription.classList.add("task-description");
     taskDescription.innerText = task.description;
     listItem.appendChild(taskDescription);
 
-    const editTaskDescription = document.createElement('button');
-    editTaskDescription.classList.add('edit-task-description');
-    editTaskDescription.innerHTML = '<i class="fas fa-pencil-alt"></i>';
-    editTaskDescription.addEventListener('click', () => {
-      const input = document.createElement('input');
-      input.type = 'text';
+    const editTaskDescriptionButton = document.createElement("button");
+    editTaskDescriptionButton.classList.add("edit-task-description");
+    editTaskDescriptionButton.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+    editTaskDescriptionButton.addEventListener("click", () => {
+      const input = document.createElement("input");
+      input.type = "text";
       input.value = task.description;
-      input.classList.add('task-input');
-      input.addEventListener('keyup', (event) => {
-        if (event.key === 'Enter') {
-          task.description = input.value;
-          saveTasks();
+      input.classList.add("task-input");
+      input.addEventListener("keyup", (event) => {
+        if (event.key === "Enter") {
+          editTaskDescription(i, input.value);
           renderTasks();
         }
       });
       listItem.replaceChild(input, taskDescription);
       input.focus();
     });
-    listItem.appendChild(editTaskDescription);
+    listItem.appendChild(editTaskDescriptionButton);
 
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('delete-button');
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button");
     deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteButton.style.display = 'none';
-    deleteButton.addEventListener('click', () => {
+    deleteButton.style.display = "none";
+    deleteButton.addEventListener("click", () => {
       deleteTask(i);
       renderTasks();
     });
     listItem.appendChild(deleteButton);
 
-    const ellipsisButton = document.createElement('button');
-    ellipsisButton.classList.add('ellipsis-button');
+    const ellipsisButton = document.createElement("button");
+    ellipsisButton.classList.add("ellipsis-button");
     ellipsisButton.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
-    ellipsisButton.addEventListener('click', () => {
-      deleteButton.style.display = 'inline-block';
-      ellipsisButton.style.display = 'none';
+    ellipsisButton.addEventListener("click", () => {
+      deleteButton.style.display = "inline-block";
+      ellipsisButton.style.display = "none";
     });
     listItem.appendChild(ellipsisButton);
 
@@ -98,28 +74,27 @@ function renderTasks() {
   });
 }
 
-addTaskButton.addEventListener('click', () => {
+addTaskButton.addEventListener("click", () => {
   const newTaskDescription = newTaskInput.value;
-  if (newTaskDescription.trim() !== '') {
+  if (newTaskDescription.trim() !== "") {
     addTask(newTaskDescription);
     renderTasks();
-    newTaskInput.value = '';
+    newTaskInput.value = "";
   }
 });
 
-newTaskInput.addEventListener('keyup', (event) => {
-  if (event.key === 'Enter') {
+newTaskInput.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
     addTaskButton.click();
   }
 });
 
-clearAllButton.addEventListener('click', () => {
-  tasks.splice(
-    0,
-    tasks.length,
-    ...tasks.filter((task) => task.completed === false),
-  );
-  updateIndexes();
+clearAllButton.addEventListener("click", () => {
+  const incompleteTasks = tasks.filter((task) => !task.completed);
+  tasks.length = 0;
+  incompleteTasks.forEach((task) => {
+    tasks.push(task);
+  });
   saveTasks();
   renderTasks();
 });
